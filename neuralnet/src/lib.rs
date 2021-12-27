@@ -57,7 +57,7 @@ pub mod tools {
                 output: None,
             }
         }
-        pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<(), NeuralNetError> {
+        pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<bool, NeuralNetError> {
             if self.weights.len() != inputs.len() {
                 return Err(NeuralNetError::Mismatch);
             }
@@ -81,7 +81,7 @@ pub mod tools {
                 _ => return Err(NeuralNetError::NotImplemented),
             }
 
-            Ok(())
+            Ok(self.output.unwrap())
         }
     }
     impl Layer {
@@ -94,7 +94,19 @@ pub mod tools {
 
             Self { id: 0, neurons }
         }
+
+        pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNetError> {
+            let mut outputs = Vec::new();
+            let mut cur_output: bool;
+            for neuron in self.neurons.iter_mut() {
+                cur_output = neuron.calc_output(inputs)?;
+                outputs.push(cur_output);
+            }
+
+            Ok(outputs)
+        }
     }
+
     impl Network {
         pub fn new(id: u8, mut layers: Vec<Layer>) -> Self {
             let mut i = 0;
