@@ -1,0 +1,1 @@
+/Users/armando/Documents/mac/my_dir/github/rusty_neuralnet/neuralnet/target/debug/neuralnet: /Users/armando/Documents/mac/my_dir/github/rusty_neuralnet/neuralnet/src/lib.rs /Users/armando/Documents/mac/my_dir/github/rusty_neuralnet/neuralnet/src/main.rs
