@@ -1,5 +1,4 @@
 pub mod tools {
-    use std::error;
     use std::fmt;
 
     #[derive(Debug)]
@@ -35,7 +34,7 @@ pub mod tools {
         weights: Vec<f32>,
         bias: f32,
         activ_func: ActivFunc,
-        output: bool,
+        output: Option<bool>,
     }
 
     pub struct Layer {
@@ -55,7 +54,7 @@ pub mod tools {
                 weights,
                 bias,
                 activ_func,
-                output: false,
+                output: None,
             }
         }
         pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<(), NeuralNetError> {
@@ -77,7 +76,7 @@ pub mod tools {
 
             match self.activ_func {
                 ActivFunc::Fuzzy => {
-                    self.output = fuzzy(z_float).unwrap();
+                    self.output = Some(fuzzy(z_float)?);
                 }
                 _ => return Err(NeuralNetError::NotImplemented),
             }
@@ -86,12 +85,24 @@ pub mod tools {
         }
     }
     impl Layer {
-        pub fn new(neurons: Vec<Neuron>) -> Self {
+        pub fn new(mut neurons: Vec<Neuron>) -> Self {
+            let mut i = 0;
+            for neuron in neurons.iter_mut() {
+                neuron.id = i;
+                i = i + 1;
+            }
+
             Self { id: 0, neurons }
         }
     }
     impl Network {
-        pub fn new(id: u8, layers: Vec<Layer>) -> Self {
+        pub fn new(id: u8, mut layers: Vec<Layer>) -> Self {
+            let mut i = 0;
+            for layer in layers.iter_mut() {
+                layer.id = i;
+                i = i + 1;
+            }
+
             Self { id, layers }
         }
     }
