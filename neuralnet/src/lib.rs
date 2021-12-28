@@ -6,6 +6,7 @@ pub mod tools {
         Mismatch,
         NotImplemented,
         InvalidActivFuncRes,
+        NoOutput,
     }
 
     impl std::error::Error for NeuralNetError {}
@@ -13,10 +14,19 @@ pub mod tools {
     impl fmt::Display for NeuralNetError {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             match self {
-                NeuralNetError::Mismatch => write!(f, "Mismatch Error"),
-                NeuralNetError::NotImplemented => write!(f, "Not Implemented Error"),
+                NeuralNetError::Mismatch => write!(
+                    f,
+                    "Mismatch Error: number of weights and inputs do not match"
+                ),
+                NeuralNetError::NotImplemented => write!(
+                    f,
+                    "Not Implemented Error: activation function not implemented"
+                ),
+                NeuralNetError::NoOutput => {
+                    write!(f, "No Output Error: neuron has no output defined")
+                }
                 NeuralNetError::InvalidActivFuncRes => {
-                    write!(f, "Invalid Active Function Result Error")
+                    write!(f, "Invalid Active Function Result Error: active function is returning something other than 1 or 0")
                 }
             }
         }
@@ -42,6 +52,7 @@ pub mod tools {
         neurons: Vec<Neuron>,
     }
 
+    #[allow(dead_code)]
     pub struct Network {
         id: u8,
         layers: Vec<Layer>,
@@ -81,7 +92,10 @@ pub mod tools {
                 _ => return Err(NeuralNetError::NotImplemented),
             }
 
-            Ok(self.output.unwrap())
+            match self.output {
+                Some(output) => return Ok(output),
+                None => return Err(NeuralNetError::NoOutput),
+            }
         }
     }
     impl Layer {
@@ -122,7 +136,10 @@ pub mod tools {
             let mut cur_input = inputs.clone();
 
             for layer in self.layers.iter_mut() {
-                cur_input = layer.calc_output(&cur_input).unwrap();
+                match layer.calc_output(&cur_input) {
+                    Ok(thing) => cur_input = thing,
+                    _ => return Err(NeuralNetError::NoOutput),
+                }
             }
 
             Ok(cur_input)
