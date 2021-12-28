@@ -117,6 +117,16 @@ pub mod tools {
 
             Self { id, layers }
         }
+
+        pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNetError> {
+            let mut cur_input = inputs.clone();
+
+            for layer in self.layers.iter_mut() {
+                cur_input = layer.calc_output(&cur_input).unwrap();
+            }
+
+            Ok(cur_input)
+        }
     }
 
     pub fn fuzzy(z_float: f32) -> Result<bool, NeuralNetError> {
