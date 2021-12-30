@@ -145,7 +145,6 @@ let w1 = vec![1.0, 1.0];
 The network is working as exprected. The rest of the code in the binary crate allows the user to test the network through a simple cli interface.
 
 ## Conclusion
-***
 I think that I was able to complete the objectives of the semester project. If this was a bigger project and worth more points some of the improvements that could be made include:
 * Wrapping the id field of every struct in an Option type,
 * Implementing a functional programming aproach instead of an object-oriented one (for example using closures for the activation functions and higher order fucntions for calculating outputs),
