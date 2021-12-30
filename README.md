@@ -1,11 +1,15 @@
 # rusty_neuralnet
 ## Introduction
+This README file contains a very brief overview of my semester project. For this project I developed a 2 layer feedforward neural network in Rust that implements the XOR logic function between two inputs given by the user. The project includes a toolset of functions to create any feedforward neural network and a cli interface for testing the implemented network. All the code in this project was written by me. 
 
 ## Code Structure
 This rust package includes two crates. The neuralnet library crate provides a set of tools that allow for the creation of multi layered feedforward neural networks.
 The binary crate consists of the semester project itself, where I use the library I created to develop a 2 layer feedforward neural network that implements the XOR logic function based on 2 user provided inputs.
 
 ## Library Crate - Creating an object-oriented toolset for feedforward neural networks
+
+We use two enums. The NeuralNetError enum implements the Debug and Display traits for the errors that the functions in this library can output in case of failure.
+The ActivFunc enum is used to express the different activation functions that can be used by each neuron. Although this enum includes several different activation functions I have only implemented the behavior for the "Fuzzy" variant which corresponds to ((sign(z)+1)/2). Trying to use any of the other activation functions will output a NotImplemented error.
 
 ```rust
 #[derive(Debug)]
@@ -23,6 +27,7 @@ The binary crate consists of the semester project itself, where I use the librar
         Fuzzy,
     }
 ```
+When it comes to structs, there are structs representing Neurons, Layers and Networks. The Neuron struct includes a vector of 32 bit floats representing its weights, a bias field, an activation function field (which is an ActivFunc enum as shown earlier), an id field and an output boolean wrapped in an Option type to allow for None outputs, while they have not been calculated yet. The Layer struct contains a vector of neurons and the Network struct contains a vector of layers. 
 
 ```rust
     pub struct Neuron {
@@ -44,6 +49,7 @@ The binary crate consists of the semester project itself, where I use the librar
         layers: Vec<Layer>,
     }
 ```
+Each of these structs implements a constructor function called new (as per Rust standards) and a calc_output function. Here is an example of the implementation block for the Neuron struct:
 
 ```rust
    impl Neuron {
@@ -87,7 +93,7 @@ The binary crate consists of the semester project itself, where I use the librar
         }
     }
 ```
-
+For the Layer struct, the calc_output function invokes the calc_output implementation for every neuron in the layer and stores the outputs in a vector of booleans.
 ```rust
 pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNetError> {
             let mut outputs = Vec::new();
@@ -97,6 +103,7 @@ pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNet
                 outputs.push(cur_output);
             }
 ```
+The Network struct implements a similar function, but it uses the outputs of one layer as the inputs of the next.
 
 ```rust
 pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNetError> {
@@ -111,6 +118,8 @@ pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNet
 ```
 
 ## Binary Crate - Implementation of the XOR logic function
+
+The binary crate is relatively simple. I started by creating the XOR network. We create 3 neurons: 1 OR neuron, 1 NAND neuron and 1 AND neuron. I added the first 2 neurons to the first layer and the remaining neuron to the second layer. Having create the layer we just create a new network with a vector containg the layer created before.
 
 ```rust
 let w1 = vec![1.0, 1.0];
@@ -133,5 +142,12 @@ let w1 = vec![1.0, 1.0];
 ```
 
 ## Testing and Results
+The network is working as exprected. The rest of the code in the binary crate allows the user to test the network through a simple cli interface.
 
 ## Conclusion
+***
+I think that I was able to complete the objectives of the semester project. If this was a bigger project and worth more points some of the improvements that could be made include:
+* Wrapping the id field of every struct in an Option type,
+* Implementing a functional programming aproach instead of an object-oriented one (for example using closures for the activation functions and higher order fucntions for calculating outputs),
+* Implementing an automated testing crate for the network.
+
