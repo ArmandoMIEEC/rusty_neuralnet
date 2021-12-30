@@ -1,13 +1,23 @@
 # rusty_neuralnet
+## Table of Contents
+1. [Introduction](#intro)
+2. [Code Structure](#code)
+3. [Library Crate](#lib)
+4. [Bynary Crate](#main)
+5. [Testing and Results](#test)
+6. [Conclusion](#end)
+
+<a name="intro"></a>
 ## Introduction
 This README file contains a very brief overview of my semester project. For this project I developed a 2 layer feedforward neural network in Rust that implements the XOR logic function between two inputs given by the user. The project includes a toolset of functions to create any feedforward neural network and a cli interface for testing the implemented network. All the code in this project was written by me. 
 
+<a name="code"></a>
 ## Code Structure
 This rust package includes two crates. The neuralnet library crate provides a set of tools that allow for the creation of multi layered feedforward neural networks.
 The binary crate consists of the semester project itself, where I use the library I created to develop a 2 layer feedforward neural network that implements the XOR logic function based on 2 user provided inputs.
 
+<a name="lib"></a>
 ## Library Crate - Creating an object-oriented toolset for feedforward neural networks
-
 We use two enums. The NeuralNetError enum implements the Debug and Display traits for the errors that the functions in this library can output in case of failure.
 The ActivFunc enum is used to express the different activation functions that can be used by each neuron. Although this enum includes several different activation functions I have only implemented the behavior for the "Fuzzy" variant which corresponds to ((sign(z)+1)/2). Trying to use any of the other activation functions will output a NotImplemented error.
 
@@ -94,6 +104,7 @@ Each of these structs implements a constructor function called new (as per Rust 
     }
 ```
 For the Layer struct, the calc_output function invokes the calc_output implementation for every neuron in the layer and stores the outputs in a vector of booleans.
+
 ```rust
 pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNetError> {
             let mut outputs = Vec::new();
@@ -116,9 +127,8 @@ pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNet
                 }
             }
 ```
-
+<a name="main"></a>
 ## Binary Crate - Implementation of the XOR logic function
-
 The binary crate is relatively simple. I started by creating the XOR network. We create 3 neurons: 1 OR neuron, 1 NAND neuron and 1 AND neuron. I added the first 2 neurons to the first layer and the remaining neuron to the second layer. Having create the layer we just create a new network with a vector containg the layer created before.
 
 ```rust
@@ -140,10 +150,11 @@ let w1 = vec![1.0, 1.0];
     let net_layers = vec![l1, l2];
     let mut net = tools::Network::new(0, net_layers);
 ```
-
+<a name="test"></a>
 ## Testing and Results
 The network is working as exprected. The rest of the code in the binary crate allows the user to test the network through a simple cli interface.
 
+<a name="end"></a>
 ## Conclusion
 I think that I was able to complete the objectives of the semester project. If this was a bigger project and worth more points some of the improvements that could be made include:
 * Wrapping the id field of every struct in an Option type,
