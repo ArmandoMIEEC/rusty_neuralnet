@@ -13,7 +13,7 @@ This README file contains a very brief overview of my semester project. For this
 
 <a name="code"></a>
 ## Code Structure
-This rust package includes two crates. The neuralnet library crate provides a set of tools that allow for the creation of multi layered feedforward neural networks.
+This Rust package includes two crates. The neuralnet library crate provides a set of tools that allow for the creation of multi layered feedforward neural networks.
 The binary crate consists of the semester project itself, where I use the library I created to develop a 2 layer feedforward neural network that implements the XOR logic function based on 2 user provided inputs.
 
 <a name="lib"></a>
@@ -37,7 +37,7 @@ The ActivFunc enum is used to express the different activation functions that ca
         Fuzzy,
     }
 ```
-When it comes to structs, there are structs representing Neurons, Layers and Networks. The Neuron struct includes a vector of 32 bit floats representing its weights, a bias field, an activation function field (which is an ActivFunc enum as shown earlier), an id field and an output boolean wrapped in an Option type to allow for None outputs, while they have not been calculated yet. The Layer struct contains a vector of neurons and the Network struct contains a vector of layers. 
+When it comes to data representation, there are structs representing Neurons, Layers and Networks. So, my library allows for the creation of multiple multi layer networks. The Neuron struct includes a vector of 32 bit floats representing its weights, a bias field, an activation function field (which is an ActivFunc enum as shown earlier), an id field and an output boolean wrapped in an Option type to allow for None outputs (if the output has not been calculated yet). The Layer struct contains a vector of neurons and the Network struct contains a vector of layers. 
 
 ```rust
     pub struct Neuron {
@@ -129,7 +129,7 @@ pub fn calc_output(&mut self, inputs: &Vec<bool>) -> Result<Vec<bool>, NeuralNet
 ```
 <a name="main"></a>
 ## Binary Crate - Implementation of the XOR logic function
-The binary crate is relatively simple. I started by creating the XOR network. We create 3 neurons: 1 OR neuron, 1 NAND neuron and 1 AND neuron. I added the first 2 neurons to the first layer and the remaining neuron to the second layer. Having create the layer we just create a new network with a vector containg the layer created before.
+The binary crate is relatively simple. I started by creating the XOR network. We create 3 neurons: 1 OR neuron, 1 NAND neuron and 1 AND neuron. I added the first 2 neurons to the first layer and the remaining neuron to the second layer. Having created the layers I just added them to a  a new network. The rest of the code in the binary crate enters a loop to constantly ask the user for new inputs for the network and calculate the final network output.
 
 ```rust
 let w1 = vec![1.0, 1.0];
@@ -152,12 +152,12 @@ let w1 = vec![1.0, 1.0];
 ```
 <a name="test"></a>
 ## Testing and Results
-The network is working as exprected. The rest of the code in the binary crate allows the user to test the network through a simple cli interface.
+The network is working as expected. I did not develop a series of hardcoded results to test the network against. Instead, I created a simple cli interface to allow the user to test the network by himself in a more interactive way.
 
 <a name="end"></a>
 ## Conclusion
 I think that I was able to complete the objectives of the semester project. If this was a bigger project and worth more points some of the improvements that could be made include:
-* Wrapping the id field of every struct in an Option type,
-* Implementing a functional programming aproach instead of an object-oriented one (for example using closures for the activation functions and higher order fucntions for calculating outputs),
-* Implementing an automated testing crate for the network.
+* Wrapping the id field of every struct in an Option type (to allow for None ids before they are set),
+* Implementing a functional programming aproach instead of an object-oriented one (for example using closures for the activation functions and higher order fucntions for calculating neuron outputs),
+* Implementing an automated testing crate for the network (to ditch the user controled cli-based testing entirely and to better test every possible failure condition.
 
