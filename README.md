@@ -157,7 +157,7 @@ The network is working as expected. I did not develop a series of hardcoded resu
 <a name="end"></a>
 ## Conclusion
 I think that I was able to complete the objectives of the semester project. If this was a bigger project and worth more points some of the improvements that could be made include:
-* Implementing a destructor method for each struct,
+* Implementing a destructor function for each struct implementation block,
 * Wrapping the id field of every struct in an Option type (to allow for None ids before they are set),
 * Implementing a functional programming aproach instead of an object-oriented one (for example using closures for the activation functions and higher order fucntions for calculating neuron outputs),
 * Implementing an automated testing crate for the network (to ditch the user controled cli-based testing entirely and to better test every possible failure condition.
